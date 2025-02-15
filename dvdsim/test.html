@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DVD Simulator</title>
+    <script>
+        var datum = '';
+        function doCheck(){
+            const windowFeatures = "width=200,height=150,left=100,top=100,toolbar=no,menubar=no,location=no,status=no,resizable=no,scrollbars=no";
+            const popup = window.open("", "popupWindow", windowFeatures);
+            if(popup == null) return -1;
+            var success = popup.outerWidth == 200;
+            popup.close();
+            if(success) return 0;
+            else return -2;
+        }
+        function openPopup(x, y, dx, dy) {
+            const windowFeatures = "width=200,height=150,left="+x+",top="+y+",toolbar=no,menubar=no,location=no,status=no,resizable=no,scrollbars=no";
+            const popup = window.open("", "popupWindow", windowFeatures);
+            popup.document.write(datum);
+            popup.document.close();
+            setTimeout(function() {
+                if (popup && !popup.closed) {
+                  popup.close();
+                }
+                if((x+dx) < 0 || (x+dx+200) > screen.availWidth) dx = -dx;
+                if((y+dy) < 0 || (y+dy+150) > screen.availHeight) dy = -dy;
+                openPopup(x+dx, y+dy, dx, dy);
+            }, 50);
+        }
+        
+    </script>
+</head>
+<body>
+    <script>
+        var xhr = new XMLHttpRequest();
+        xhr.open("GET", "dvd.jpeg");
+        xhr.responseType = "blob";
+        xhr.onload = function(){
+            if (xhr.status === 200) {
+                var blob = xhr.response;
+                var reader = new FileReader();
+                reader.onloadend = function(){
+                    datum = '<body><style>body{margin:0;background:#000;}</style><img src="'+reader.result+'" width="200"></body>';
+                    var code = doCheck();
+                    if(code == -2){
+                        alert("Sorry, browser not supported");
+                    }else if(code == -1){
+                        alert("Please allow popups!");
+                    }else{
+                        openPopup(0, 0, 30, 20);
+                    }
+                };
+                reader.readAsDataURL(blob);
+            }else{
+                alert("Sorry, unable to load!");
+            }
+        };
+        xhr.send();
+    </script>
+    <h1>DVD Simulator</h1>
+</body>
+</html>
