@@ -1,0 +1,56 @@
+.card-content {
+    background-color: #ffffff; /* Light gray for the base */
+    height: 100%; /* Adjust height to content */
+    width: 100%;
+    font-family: monospace; /* Retro monospace font */
+}
+
+.card-title-bar {
+    background-color: #dddddd; /* Light gray title bar background */
+    border-bottom: 2px solid #800080; /* Darker purple bottom border */
+    padding: 8px 15px; /* Padding for title bar content */
+    display: flex;
+    justify-content: space-between; /* Space between title and controls */
+    align-items: center; /* Vertically align items in title bar */
+}
+
+.card-title {
+    font-size: 1em;
+    margin: 0; /* Remove default margins */
+}
+
+.card-controls {
+    display: flex;
+}
+
+.card-control-button {
+    width: 12px;
+    height: 12px;
+    border: 2px solid #800080;
+    margin-left: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 0.8em; /* Size of the 'x' */
+    line-height: 0.8em; /* Vertically center 'x' */
+}
+
+.card-control-button.minimize {
+}
+
+.card-control-button.maximize {
+    /* Square for maximize - no content needed */
+}
+
+.card-control-button.close {
+    /* 'x' for close */
+    content: "x"; /* You can try this, or use pseudo-elements for a better 'x' */
+}
+
+.card-content-area {
+    background-color: #ffffff; /* White background for content */
+    padding: 20px;
+    height: auto;
+    flex-grow: 1; 
+}
+
