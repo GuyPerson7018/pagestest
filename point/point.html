@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<style>
+body {
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    background-position: center center;
+    margin: 0;
+    height: 100vh;
+}
+</style>
+<script>
+let coords = [];
+let debounceTimer;
+
+function loadCoordinates() {
+    const xhr = new XMLHttpRequest();
+    xhr.open('GET', 'coords.json', true);
+    xhr.onreadystatechange = function() {
+        if (xhr.readyState === 4) {
+            if (xhr.status === 200) {
+                coords = JSON.parse(xhr.responseText);
+            }
+        }
+    };
+    xhr.send();
+}
+
+function squaredDistance(x1, y1, x2, y2) {
+    const dx = x1 - x2;
+    const dy = y1 - y2;
+    return dx * dx + dy * dy;
+}
+
+function updateBackground(event) {
+    const normalizedX = event.clientX / window.innerWidth;
+    const normalizedY = event.clientY / window.innerHeight;
+
+    if (coords.length === 0) {
+        return;
+    }
+
+    let closestIndex = -1;
+    let minDistance = Infinity;
+
+    coords.forEach((point, index) => {
+        const [x, y] = point;
+        const distance = squaredDistance(normalizedX, normalizedY, x, y);
+        if (distance < minDistance) {
+            minDistance = distance;
+            closestIndex = index;
+        }
+    });
+
+    if (closestIndex !== -1) {
+        document.body.style.backgroundImage = `url('images/${closestIndex}.jpg')`;
+    }
+}
+
+function debouncedPointerMove(event) {
+    clearTimeout(debounceTimer);
+    debounceTimer = setTimeout(() => {
+        updateBackground(event);
+    }, 200);
+}
+document.addEventListener("DOMContentLoaded", function() {
+    loadCoordinates();
+    window.addEventListener("mousemove", debouncedPointerMove);
+});
+</script>
+</head>
+<body>
+</body>
+</html>
